@@ -75,7 +75,7 @@ std::vector<int> findLocation(std::string sample, char findIt)
 int* separarValoresTiempo(std::string tiempo){
     
     if(!tiempo.contains(":")){
-        return new int[]{ std::stoi(tiempo) };
+        return new int[3]{ 0, 0, std::stoi(tiempo) };
     }
 
     std::vector<int> separador { findLocation(tiempo, ':') };
@@ -83,29 +83,21 @@ int* separarValoresTiempo(std::string tiempo){
     if(separador.size() == 1){
         std::string mins { tiempo.substr(0, separador.at(0))};
         std::string segs { tiempo.substr(separador.at(0)+1, tiempo.length()-1) };
-        return new int[]{ std::stoi(mins), std::stoi(segs)};
+        return new int[3]{ 0, std::stoi(mins), std::stoi(segs)};
     }
 
     if(separador.size() == 2){
         std::string horas { tiempo.substr(0, separador.at(0))};
         std::string mins { tiempo.substr(separador.at(0)+1, separador.at(1)) };
         std::string segs { tiempo.substr(separador.at(1)+1, tiempo.length()-1) };
-        return new int[]{ std::stoi(horas), std::stoi(mins), std::stoi(segs)};
+        return new int[3]{ std::stoi(horas), std::stoi(mins), std::stoi(segs)};
     }
 
     return nullptr;
 }
 
-int transformarTiempoASegundos(int tiempo[]){ 
-    short tiempoLength { std::size(tiempo) };
-
-    if(tiempoLength == 1) return tiempo[0];
-
-    if(tiempoLength == 2) return tiempo[0]*MINS_A_SEGS + tiempo[1];
-
-    if(tiempoLength == 3) return tiempo[0]*HORAS_A_SEGS + tiempo[1]*MINS_A_SEGS + tiempo[2];
-
-    return -1;
+int transformarTiempoASegundos(int* tiempo){ 
+    return tiempo[0]*HORAS_A_SEGS + tiempo[1]*MINS_A_SEGS + tiempo[2];
 }
 
 #endif
