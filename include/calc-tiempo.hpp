@@ -127,7 +127,11 @@ inline std::string convertirResultadoATiempo(int resultadoEnSegs){
     double segundosDecimal { parteFraccionariaMins*MINS_A_SEGS };
     int segs { static_cast<int>(round(segundosDecimal)) };
 
-    return std::string(std::to_string(hora) + ':' + std::to_string(mins) + ':' + std::to_string(segs));
+    if(segs == 60){ ++mins; segs = 0; }
+
+    if(mins == 60){ ++hora; mins = 0; }
+
+    return std::string(std::to_string(hora)+':'+std::to_string(mins)+':'+std::to_string(segs));
 }
 
 #endif
