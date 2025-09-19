@@ -1,11 +1,9 @@
-#ifndef CALC_TIEMPO
-#define CALC_TIEMPO
+#ifndef CALC_TIEMPO_HPP
+#define CALC_TIEMPO_HPP
 
-#include "ctre.hpp"
-#include <iostream>
 #include <vector>
 #include <string>
-#include <bits/stdc++.h>
+#include "ctre.hpp"
 
 #define HORAS_A_SEGS 3600
 #define MINS_A_SEGS  60
@@ -15,7 +13,7 @@ enum Operaciones {
     RESTA
 };
 
-bool validarFormato(std::string tiempo){
+inline bool validarFormato(std::string tiempo){
     if(tiempo.empty()) return false;
 
     short longitudString {static_cast<short>(tiempo.length())};
@@ -62,41 +60,43 @@ bool validarFormato(std::string tiempo){
 }
 
 // De: https://stackoverflow.com/questions/7726762/finding-all-occurrences-of-a-character-in-a-string
-std::vector<int> findLocation(std::string sample, char findIt)
+inline std::vector<int> findLocation(std::string sample, char findIt)
 {
-    std::vector<int> characterLocations;
-    for(int i =0; i < sample.size(); i++)
+    std::vector<int> characterLocations {};
+    for(size_t i = 0; i < sample.size(); ++i)
         if(sample[i] == findIt)
             characterLocations.push_back(i);
 
     return characterLocations;
 }
 
-int* separarValoresTiempo(std::string tiempo){
+inline int* separarValoresTiempo(std::string tiempo){
     
-    if(!tiempo.contains(":")){
-        return new int[3]{ 0, 0, std::stoi(tiempo) };
-    }
+    if(!tiempo.contains(":")) return new int[3]{ 0, 0, std::stoi(tiempo) };
+
+    std::string horas {};
+    std::string mins {};
+    std::string segs {};
 
     std::vector<int> separador { findLocation(tiempo, ':') };
 
-    if(separador.size() == 1){
-        std::string mins { tiempo.substr(0, separador.at(0))};
-        std::string segs { tiempo.substr(separador.at(0)+1, tiempo.length()-1) };
-        return new int[3]{ 0, std::stoi(mins), std::stoi(segs)};
+    switch(separador.size()){
+        case 1: { horas = "0";
+                  mins = tiempo.substr(0, separador.at(0));
+                  segs = tiempo.substr(separador.at(0)+1, tiempo.length()-1);
+                }
+                break;
+        case 2: { horas = tiempo.substr(0, separador.at(0));
+                  mins = tiempo.substr(separador.at(0)+1, separador.at(1));
+                  segs = tiempo.substr(separador.at(1)+1, tiempo.length()-1);
+                }    
+                break;
     }
 
-    if(separador.size() == 2){
-        std::string horas { tiempo.substr(0, separador.at(0))};
-        std::string mins { tiempo.substr(separador.at(0)+1, separador.at(1)) };
-        std::string segs { tiempo.substr(separador.at(1)+1, tiempo.length()-1) };
-        return new int[3]{ std::stoi(horas), std::stoi(mins), std::stoi(segs)};
-    }
-
-    return nullptr;
+    return new int[3]{ std::stoi(horas), std::stoi(mins), std::stoi(segs) };
 }
 
-int transformarTiempoASegundos(int* tiempo){ 
+inline int transformarTiempoASegundos(int* tiempo){
     return tiempo[0]*HORAS_A_SEGS + tiempo[1]*MINS_A_SEGS + tiempo[2];
 }
 
