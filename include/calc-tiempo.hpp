@@ -100,4 +100,11 @@ inline int transformarTiempoASegundos(int* tiempo){
     return tiempo[0]*HORAS_A_SEGS + tiempo[1]*MINS_A_SEGS + tiempo[2];
 }
 
+inline int calcularTiempo(int t1, int t2, Operaciones op){
+    switch (op) {
+        case SUMA: return t1 + t2; break;
+        case RESTA: return t1 - t2; break;
+    }
+}
+
 #endif
