@@ -1,0 +1,28 @@
+// De 1 a 8 caracteres
+s 1 if1
+ss 2 if1
+m:s 3 if2, if3
+m:ss 4 if3 
+mm:s 4 if2
+h:m:s 5
+mm:ss 5
+hh:m:s 6
+h:mm:s 6
+h:m:ss 6
+hh:mm:s 7
+hh:m:ss 7
+h:mm:ss 7
+hhh:m:s 7
+hh:mm:ss 8
+hhh:mm:s 8
+hhh:m:ss 8
+hhhh:m:s 8
+
+//Más de 8 caracteres
+hhh:mm:ss 9
+
+hhhh:mm:s 9
+hhhh:m:ss 9
+hhhh:mm:ss 10
+
+hhhhh+:m{1,2}:s{1,2}
