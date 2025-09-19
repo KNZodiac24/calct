@@ -1,12 +1,16 @@
 #ifndef CALC_TIEMPO_HPP
 #define CALC_TIEMPO_HPP
 
+#include <cmath>
 #include <vector>
 #include <string>
 #include "ctre.hpp"
 
-#define HORAS_A_SEGS 3600
-#define MINS_A_SEGS  60
+#define HORAS_EN_SEGS 3600
+#define MINS_EN_SEGS  60
+#define SEGS_A_HORAS  1/3600
+#define HORAS_A_MINS  60
+#define MINS_A_SEGS   60 
 
 enum Operaciones {
     SUMA,
@@ -97,7 +101,7 @@ inline int* separarValoresTiempo(std::string tiempo){
 }
 
 inline int transformarTiempoASegundos(int* tiempo){
-    return tiempo[0]*HORAS_A_SEGS + tiempo[1]*MINS_A_SEGS + tiempo[2];
+    return tiempo[0]*HORAS_EN_SEGS + tiempo[1]*MINS_EN_SEGS + tiempo[2];
 }
 
 inline int calcularTiempo(int t1, int t2, Operaciones op){
@@ -105,6 +109,25 @@ inline int calcularTiempo(int t1, int t2, Operaciones op){
         case SUMA: return t1 + t2; break;
         case RESTA: return t1 - t2; break;
     }
+}
+
+inline std::string convertirResultadoATiempo(int resultadoEnSegs){
+    double resultadoAConvertir { double(resultadoEnSegs) };
+
+    double horaDecimal { resultadoAConvertir*SEGS_A_HORAS };
+    double parteEnteraHora {};
+    double parteFraccionariaHora { std::modf(horaDecimal, &parteEnteraHora) };
+    int hora { static_cast<int>(parteEnteraHora) };
+
+    double minutosDecimal { parteFraccionariaHora*HORAS_A_MINS };
+    double parteEnteraMins {};
+    double parteFraccionariaMins { std::modf(minutosDecimal, &parteEnteraMins) };
+    int mins { static_cast<int>(parteEnteraMins) };
+
+    double segundosDecimal { parteFraccionariaMins*MINS_A_SEGS };
+    int segs { static_cast<int>(round(segundosDecimal)) };
+
+    return std::string(std::to_string(hora) + ':' + std::to_string(mins) + ':' + std::to_string(segs));
 }
 
 #endif
