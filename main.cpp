@@ -12,9 +12,6 @@ int main(){
     std::cout << "Ingresa el primer tiempo: ";
     std::getline( std::cin >> std::ws, primerTiempo);
 
-    if(!validarFormato(primerTiempo)){
-        return 1;
-    }
 
     return 0;
 }

@@ -13,13 +13,16 @@
 #define HORAS_A_MINS  60
 #define MINS_A_SEGS   60 
 
+#define ERROR_FORMATO "El formato ingresado en uno o ambos tiempos no es válido:\n\t-> Ejecutar el programa con -h para ver el formato correcto y ejemplos de uso\n"
+#define ERROR_RANGO_VALORES "Uno o varios de los valores ingresados están fuera del rango válido de tiempo:\n\t-> minutos y segundos deben ser menor o igual a 59\n"
+
 enum Operaciones {
     SUMA,
     RESTA
 };
 
-inline bool validarFormato(std::string tiempo){
-    if(tiempo.empty()) return false;
+inline std::expected<bool, std::string> validarFormato(std::string tiempo){
+    if(tiempo.empty()) return std::unexpected(ERROR_FORMATO);
 
     short longitudString {static_cast<short>(tiempo.length())};
 
@@ -27,14 +30,14 @@ inline bool validarFormato(std::string tiempo){
         auto matcher {ctre::match<"^[0-9]{1,2}$">};
         if(matcher(tiempo)) return true;
         
-        return false;
+        return std::unexpected(ERROR_FORMATO);
     } 
     
     if(longitudString >= 3 && longitudString <= 4 ){
         auto matcher {ctre::match<"^[0-9]{1,2}:[0-9]{1}|[0-9]{1}:[0-9]{1,2}$">};
         if(matcher(tiempo)) return true;
 
-        return false;
+        return std::unexpected(ERROR_FORMATO);
     }
 
     if(longitudString == 5 ){
@@ -44,21 +47,21 @@ inline bool validarFormato(std::string tiempo){
         auto matcherHorMinYseg {ctre::match<"^[0-9]{1}:[0-9]{1}:[0-9]{1}$">};
         if(matcherHorMinYseg(tiempo)) return true;
 
-        return false;
+        return std::unexpected(ERROR_FORMATO);
     }
 
     if(longitudString >= 6 && longitudString <= 8 ){
         auto matcher {ctre::match<"^[0-9]{1,2}:[0-9]{1,2}:[0-9]{2}|[0-9]{1,2}:[0-9]{2}:[0-9]{1,2}|[0-9]{2}:[0-9]{1,2}:[0-9]{1,2}|[0-9]{4}:[0-9]{1}:[0-9]{1}|[0-9]{3}:[0-9]{1,2}:[0-9]{1,2}$">};
         if(matcher(tiempo)) return true;
 
-        return false;
+        return std::unexpected(ERROR_FORMATO);
     }
 
     if(longitudString > 8 ){
         auto matcher {ctre::match<"^[0-9]{3}:[0-9]{2}:[0-9]{2}|[0-9]{4,}:[0-9]{1,2}:[0-9]{1,2}$">};
         if(matcher(tiempo)) return true;
 
-        return false;
+        return std::unexpected(ERROR_FORMATO);
     }
 
     return false;
@@ -102,7 +105,7 @@ inline std::expected<int*, std::string> separarValoresTiempo(std::string tiempo)
     int mins { std::stoi(minsStr) };
     int segs { std::stoi(segsStr) };
 
-    if(mins > 59 || segs > 59) return std::unexpected("Uno o varios de los valores ingresados están fuera del rango válido de tiempo:\n\t-> minutos y segundos deben ser menor o igual a 59\n");
+    if(mins > 59 || segs > 59) return std::unexpected(ERROR_RANGO_VALORES);
 
     return new int[3]{ horas, mins, segs };
 }
@@ -140,5 +143,7 @@ inline std::string convertirResultadoATiempo(int resultadoEnSegs){
 
     return std::string(std::to_string(hora)+':'+std::to_string(mins)+':'+std::to_string(segs));
 }
+
+inline void ejecutarCalculo();
 
 #endif
