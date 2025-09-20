@@ -15,8 +15,9 @@
 #define HORAS_A_MINS  60
 #define MINS_A_SEGS   60 
 
-#define ERROR_FORMATO "El formato ingresado en uno o ambos tiempos no es válido:\n\t-> Ejecutar el programa con -h para ver el formato correcto y ejemplos de uso\n"
-#define ERROR_RANGO_VALORES "Uno o varios de los valores ingresados están fuera del rango válido de tiempo:\n\t-> minutos y segundos deben ser menor o igual a 59\n"
+#define ERROR_FORMATO "El formato ingresado en uno o ambos tiempos no es válido:\n\t-> Ejecutar con -h para ver el formato correcto y ejemplos de uso\n"
+#define ERROR_RANGO_VALORES "Uno o varios de los valores ingresados están fuera del rango válido de tiempo:\n\t-> Minutos y segundos deben ser menor o igual a 59\n"
+#define ERROR_ARGUMENTOS_INVALIDOS "Uno o varios de los argumentos ingresados no son válidos:\n\t-> Ejecutar con -h para ver el formato correcto y ejemplos de uso\n"
 
 enum Operaciones {
     SUMA,
