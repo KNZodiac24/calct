@@ -1,6 +1,8 @@
 #ifndef CALC_TIEMPO_HPP
 #define CALC_TIEMPO_HPP
 
+#include <cstdlib>
+#include <iostream>
 #include <cmath>
 #include <vector>
 #include <string>
@@ -20,6 +22,12 @@ enum Operaciones {
     SUMA,
     RESTA
 };
+
+inline void imprimirMensajeAyuda(){
+    std::cout << "-------------------- CALCULADORA DE TIEMPO --------------------\n---------------------------------------------------------------\n\n";
+    std::cout << "Se deben ingresar los tiempos con el siguiente formato: hh:mm:ss\nEl nivel de detalle máximo aceptado es en horas, y el mínimo en segundos.\n---------------------------------------------------------------\n";
+    std::cout << "Ejemplos de uso (formato -> equivalencia en lenguaje natural):\n10:31:27 -> 10 horas, 31 minutos y 27 segundos\n01:03:07 -> 1 hora, 3 minutos y 7 segundos\n2:1:0 -> 2 horas, 1 minuto y 0 segundos\n10:3 -> 10 minutos y 3 segundos\n5:07 -> 5 minutos y 7 segundos\n34 -> 34 segundos\n03 -> 3 segundos\n9 -> 9 segundos\n\n";
+}
 
 inline std::expected<bool, std::string> validarFormato(std::string tiempo){
     if(tiempo.empty()) return std::unexpected(ERROR_FORMATO);
@@ -114,7 +122,7 @@ inline int transformarTiempoASegundos(int* tiempo){
     return tiempo[0]*HORAS_EN_SEGS + tiempo[1]*MINS_EN_SEGS + tiempo[2];
 }
 
-inline int calcularTiempo(int t1, int t2, Operaciones op){
+inline int realizarOperacion(int t1, int t2, Operaciones op){
     switch (op) {
         case SUMA: return t1 + t2; break;
         case RESTA: return t1 - t2; break;
@@ -144,6 +152,25 @@ inline std::string convertirResultadoATiempo(int resultadoEnSegs){
     return std::string(std::to_string(hora)+':'+std::to_string(mins)+':'+std::to_string(segs));
 }
 
-inline void ejecutarCalculo();
+inline std::string ejecutarCalculo(std::string t1, std::string t2, Operaciones op){
+    auto validacionFormatoT1 { validarFormato(t1) };
+    auto validacionFormatoT2 { validarFormato(t2) };
+    
+    if(!validacionFormatoT1){ std::cout << validacionFormatoT1.error(); exit(EXIT_FAILURE); }
+    if(!validacionFormatoT2){ std::cout << validacionFormatoT2.error(); exit(EXIT_FAILURE); }
+
+    auto valoresT1 { separarValoresTiempo(t1) };
+    auto valoresT2 { separarValoresTiempo(t2) };
+
+    if(!valoresT1){ std::cout << valoresT1.error(); exit(EXIT_FAILURE); }
+    if(!valoresT2){ std::cout << valoresT2.error(); exit(EXIT_FAILURE); }
+
+    int t1EnSegs { transformarTiempoASegundos(*valoresT1) };
+    int t2EnSegs { transformarTiempoASegundos(*valoresT2) };
+
+    int resultadoEnSegs { realizarOperacion(t1EnSegs, t2EnSegs, op) };
+
+    return convertirResultadoATiempo(resultadoEnSegs);
+}
 
 #endif
