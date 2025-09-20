@@ -4,6 +4,7 @@
 #include <cmath>
 #include <vector>
 #include <string>
+#include <expected>
 #include "ctre.hpp"
 
 #define HORAS_EN_SEGS 3600
@@ -74,30 +75,36 @@ inline std::vector<int> findLocation(std::string sample, char findIt)
     return characterLocations;
 }
 
-inline int* separarValoresTiempo(std::string tiempo){
+inline std::expected<int*, std::string> separarValoresTiempo(std::string tiempo){
     
     if(!tiempo.contains(":")) return new int[3]{ 0, 0, std::stoi(tiempo) };
 
-    std::string horas {};
-    std::string mins {};
-    std::string segs {};
+    std::string horasStr {};
+    std::string minsStr {};
+    std::string segsStr {};
 
     std::vector<int> separador { findLocation(tiempo, ':') };
 
     switch(separador.size()){
-        case 1: { horas = "0";
-                  mins = tiempo.substr(0, separador.at(0));
-                  segs = tiempo.substr(separador.at(0)+1, tiempo.length()-1);
+        case 1: { horasStr = "0";
+                  minsStr = tiempo.substr(0, separador.at(0));
+                  segsStr = tiempo.substr(separador.at(0)+1, tiempo.length()-1); 
                 }
                 break;
-        case 2: { horas = tiempo.substr(0, separador.at(0));
-                  mins = tiempo.substr(separador.at(0)+1, separador.at(1));
-                  segs = tiempo.substr(separador.at(1)+1, tiempo.length()-1);
+        case 2: { horasStr = tiempo.substr(0, separador.at(0));
+                  minsStr = tiempo.substr(separador.at(0)+1, separador.at(1));
+                  segsStr = tiempo.substr(separador.at(1)+1, tiempo.length()-1);
                 }    
                 break;
     }
 
-    return new int[3]{ std::stoi(horas), std::stoi(mins), std::stoi(segs) };
+    int horas { std::stoi(horasStr) };
+    int mins { std::stoi(minsStr) };
+    int segs { std::stoi(segsStr) };
+
+    if(mins > 59 || segs > 59) return std::unexpected("Uno o varios de los valores ingresados están fuera del rango válido de tiempo:\n\t-> minutos y segundos deben ser menor o igual a 59\n");
+
+    return new int[3]{ horas, mins, segs };
 }
 
 inline int transformarTiempoASegundos(int* tiempo){

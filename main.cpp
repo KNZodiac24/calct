@@ -2,8 +2,6 @@
 #include <string>
 #include "calc-tiempo.hpp"
 
-#define ERROR_FORMATO "El formato ingresado no es válido\n"
-
 int main(){
 
     std::cout << "-------------------- CALCULADORA DE TIEMPO --------------------\n---------------------------------------------------------------\n\n";
@@ -15,7 +13,6 @@ int main(){
     std::getline( std::cin >> std::ws, primerTiempo);
 
     if(!validarFormato(primerTiempo)){
-        std::cout << ERROR_FORMATO;
         return 1;
     }
 
