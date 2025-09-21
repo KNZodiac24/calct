@@ -32,6 +32,19 @@ inline void imprimirMensajeAyuda(){
     std::cout << "Ejemplos de uso:\nSuma de tiempos:\n\t23:19 + 56 -> 24:15\n\t1:3:4 + 2:34:1 -> 3:37:5\nResta de tiempos:\n\t4:56:12 - 1:23:09 -> 3:33:3\n\t57:29 - 19:51 -> 37:38";
 }
 
+/**
+ * @brief Valida el formato de tiempo ingresado.
+ * 
+ * Valida el formato en hh:mm:ss del tiempo ingresado.
+ * 
+ * @param tiempo: el tiempo al cual validar su formato.
+ * 
+ * @return std::expected que es un bool de valor true
+ *
+ * cuando se cumple el formato. Caso contrario devuelve
+ *
+ * un std::unexpected indicando que el formato no se cumple.
+ */
 inline std::expected<bool, std::string> validarFormato(std::string tiempo){
     if(tiempo.empty()) return std::unexpected(ERROR_FORMATO);
 
@@ -75,7 +88,7 @@ inline std::expected<bool, std::string> validarFormato(std::string tiempo){
         return std::unexpected(ERROR_FORMATO);
     }
 
-    return false;
+    return std::unexpected(ERROR_FORMATO);
 }
 
 // De: https://stackoverflow.com/questions/7726762/finding-all-occurrences-of-a-character-in-a-string
@@ -89,6 +102,21 @@ inline std::vector<int> findLocation(std::string sample, char findIt)
     return characterLocations;
 }
 
+/**
+ * @brief Separa los valores de tiempo en números enteros.
+ * 
+ * Separa las horas, minutos y segundos del tiempo ingresado.
+ * 
+ * @param tiempo: el tiempo del cual se obtienen las horas, minutos y segundos.
+ * 
+ * @return std::expected que es un puntero a un arreglo de 3 enteros que
+ *
+ * contiene los valores separados de horas, minutos y segundos. En caso de
+ * 
+ * que los valores de minutos o segundos sean mayores a 59, se retorna un 
+ * 
+ * std::unexpected indicando que dichos valores tienen esa restricción.
+ */
 inline std::expected<int*, std::string> separarValoresTiempo(std::string tiempo){
     
     if(!tiempo.contains(":")) return new int[3]{ 0, 0, std::stoi(tiempo) };
@@ -121,10 +149,36 @@ inline std::expected<int*, std::string> separarValoresTiempo(std::string tiempo)
     return new int[3]{ horas, mins, segs };
 }
 
+/**
+ * @brief Transforma los valores de tiempo en segundos.
+ *
+ * A partir de los valores de horas, minutos y segundos, se calcula 
+ *
+ * el tiempo total equivalente en segundos.
+ * 
+ * @param tiempo: puntero al arreglo de 3 enteros que contiene 
+ *
+ * las horas, minutos y segundos.
+ * 
+ * @return El valor equivalente en segundos del tiempo total ingresado.
+ */
 inline int transformarTiempoASegundos(int* tiempo){
     return tiempo[0]*HORAS_EN_SEGS + tiempo[1]*MINS_EN_SEGS + tiempo[2];
 }
 
+/**
+ * @brief Realiza la operación indicada de los valores de tiempo en segundos.
+ *
+ * @param t1: valor en segundos del primer tiempo de la operación.
+ *
+ * @param t2: valor en segundos del segundo tiempo de la operación.
+ *
+ * @param op: alguno de los valores definidos en el enum Operaciones,
+ *
+ * que indica la operación a realizar entre los dos tiempos.
+ * 
+ * @return El resultado en segundos de la operación realizada entre los dos tiempos.
+ */
 inline int realizarOperacion(int t1, int t2, Operaciones op){
     int resultado {};
     switch (op) {
