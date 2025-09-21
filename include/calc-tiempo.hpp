@@ -157,6 +157,10 @@ inline std::string convertirResultadoATiempo(int resultadoEnSegs){
 
     if(mins == 60){ ++hora; mins = 0; }
 
+    if(hora == 0 && mins == 0) return std::to_string(segs);
+
+    if(hora == 0) return std::string(std::to_string(mins)+':'+std::to_string(segs));
+    
     return std::string(std::to_string(hora)+':'+std::to_string(mins)+':'+std::to_string(segs));
 }
 
