@@ -18,6 +18,7 @@
 #define ERROR_FORMATO "El formato ingresado en uno o ambos tiempos no es válido:\n\t-> Ejecutar con -h para ver el formato correcto y ejemplos de uso\n"
 #define ERROR_RANGO_VALORES "Uno o varios de los valores ingresados están fuera del rango válido de tiempo:\n\t-> Minutos y segundos deben ser menor o igual a 59\n"
 #define ERROR_ARGUMENTOS_INVALIDOS "Uno o varios de los argumentos ingresados no son válidos:\n\t-> Ejecutar con -h para ver el formato correcto y ejemplos de uso\n"
+#define ERROR_RESTA_INVALIDA "La operación ingresada no es válida:\n\t-> El primer tiempo ingresado debe ser mayor o igual al segundo.\n"
 
 enum Operaciones {
     SUMA,
@@ -27,7 +28,8 @@ enum Operaciones {
 inline void imprimirMensajeAyuda(){
     std::cout << "-------------------- CALCULADORA DE TIEMPO --------------------\n---------------------------------------------------------------\n\n";
     std::cout << "Se deben ingresar los tiempos con el siguiente formato: hh:mm:ss\nEl nivel de detalle máximo aceptado es en horas, y el mínimo en segundos.\n---------------------------------------------------------------\n";
-    std::cout << "Ejemplos de uso (formato -> equivalencia en lenguaje natural):\n10:31:27 -> 10 horas, 31 minutos y 27 segundos\n01:03:07 -> 1 hora, 3 minutos y 7 segundos\n2:1:0 -> 2 horas, 1 minuto y 0 segundos\n10:3 -> 10 minutos y 3 segundos\n5:07 -> 5 minutos y 7 segundos\n34 -> 34 segundos\n03 -> 3 segundos\n9 -> 9 segundos\n\n";
+    std::cout << "Ejemplos de formato (formato -> equivalencia en lenguaje natural):\n10:31:27 -> 10 horas, 31 minutos y 27 segundos\n01:03:07 -> 1 hora, 3 minutos y 7 segundos\n2:1:0 -> 2 horas, 1 minuto y 0 segundos\n10:3 -> 10 minutos y 3 segundos\n5:07 -> 5 minutos y 7 segundos\n34 -> 34 segundos\n03 -> 3 segundos\n9 -> 9 segundos\n\n";
+    std::cout << "Ejemplos de uso:\nSuma de tiempos:\n\t23:19 + 56 -> 24:15\n\t1:3:4 + 2:34:1 -> 3:37:5\nResta de tiempos:\n\t4:56:12 - 1:23:09 -> 3:33:3\n\t57:29 - 19:51 -> 37:38";
 }
 
 inline std::expected<bool, std::string> validarFormato(std::string tiempo){
@@ -124,10 +126,15 @@ inline int transformarTiempoASegundos(int* tiempo){
 }
 
 inline int realizarOperacion(int t1, int t2, Operaciones op){
+    int resultado {};
     switch (op) {
-        case SUMA: return t1 + t2; break;
-        case RESTA: return t1 - t2; break;
+        case SUMA: resultado = t1 + t2; break;
+        case RESTA: {
+            if(t1 >= t2){ resultado = t1 - t2; break; }
+            std::cout << ERROR_RESTA_INVALIDA; exit(EXIT_FAILURE);
+        }break;
     }
+    return resultado;
 }
 
 inline std::string convertirResultadoATiempo(int resultadoEnSegs){
