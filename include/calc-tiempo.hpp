@@ -34,17 +34,13 @@ inline void imprimirMensajeAyuda(){
 }
 
 /**
- * @brief Valida el formato de tiempo ingresado.
- * 
- * Valida el formato en hh:mm:ss del tiempo ingresado.
+ * @brief Valida el formato en hh:mm:ss del tiempo ingresado.
  * 
  * @param tiempo: el tiempo al cual validar su formato.
  * 
  * @return std::expected que es un bool de valor true
- *
- * cuando se cumple el formato. Caso contrario devuelve
- *
- * un std::unexpected indicando que el formato no se cumple.
+ *         cuando se cumple el formato. Caso contrario devuelve
+ *         un std::unexpected indicando que el formato no se cumple.
  */
 inline std::expected<bool, std::string> validarFormato(std::string tiempo){
     if(tiempo.empty()) return std::unexpected(ERROR_FORMATO);
@@ -104,19 +100,14 @@ inline std::vector<int> findLocation(std::string sample, char findIt)
 }
 
 /**
- * @brief Separa los valores de tiempo en números enteros.
- * 
- * Separa las horas, minutos y segundos del tiempo ingresado.
+ * @brief Separa en números enteros las horas, minutos y segundos del tiempo ingresado.
  * 
  * @param tiempo: el tiempo del cual se obtienen las horas, minutos y segundos.
  * 
  * @return std::expected que es un puntero a un arreglo de 3 enteros que
- *
- * contiene los valores separados de horas, minutos y segundos. En caso de
- * 
- * que los valores de minutos o segundos sean mayores a 59, se retorna un 
- * 
- * std::unexpected indicando que dichos valores tienen esa restricción.
+ *         contiene los valores separados de horas, minutos y segundos. En caso de
+ *         que los valores de minutos o segundos sean mayores a 59, se retorna un 
+ *         std::unexpected indicando que dichos valores tienen esa restricción.
  */
 inline std::expected<int*, std::string> separarValoresTiempo(std::string tiempo){
     
@@ -151,15 +142,11 @@ inline std::expected<int*, std::string> separarValoresTiempo(std::string tiempo)
 }
 
 /**
- * @brief Transforma los valores de tiempo en segundos.
- *
- * A partir de los valores de horas, minutos y segundos, se calcula 
- *
- * el tiempo total equivalente en segundos.
+ * @brief A partir de los valores de horas, minutos y segundos, se calcula 
+ *        el tiempo total equivalente en segundos.
  * 
- * @param tiempo: puntero al arreglo de 3 enteros que contiene 
- *
- * las horas, minutos y segundos.
+ * @param tiempo: puntero al arreglo de 3 enteros que contiene
+ *                las horas, minutos y segundos.
  * 
  * @return El valor equivalente en segundos del tiempo total ingresado.
  */
@@ -171,12 +158,9 @@ inline int transformarTiempoASegundos(int* tiempo){
  * @brief Realiza la operación indicada de los valores de tiempo en segundos.
  *
  * @param t1: valor en segundos del primer tiempo de la operación.
- *
  * @param t2: valor en segundos del segundo tiempo de la operación.
- *
  * @param op: alguno de los valores definidos en el enum Operaciones,
- *
- * que indica la operación a realizar entre los dos tiempos.
+ *            que indica la operación a realizar entre los dos tiempos.
  * 
  * @return El resultado en segundos de la operación realizada entre los dos tiempos.
  */
@@ -230,16 +214,12 @@ inline std::string convertirResultadoATiempo(int resultadoEnSegs){
  * @brief Ejecuta secuencialmente todo el procedimiento para calcular la operación entre tiempos.
  *
  * @param t1: cadena de texto del primer tiempo de la operación.
- *
  * @param t2: cadena de texto del segundo tiempo de la operación.
- *
- * @param op: alguno de los valores definidos en el enum Operaciones, que indica la operación a 
- *
- * realizar entre los dos tiempos.
+ * @param op: alguno de los valores definidos en el enum Operaciones, que indica 
+ *            la operación a realizar entre los dos tiempos.
  * 
  * @return El resultado de la operación realizada entre los dos tiempos como cadena de texto
- * 
- * siguiendo el formato establecido.
+ *         siguiendo el formato establecido.
  */
 inline std::string ejecutarCalculo(std::string t1, std::string t2, Operaciones op){
     auto validacionFormatoT1 { validarFormato(t1) };
