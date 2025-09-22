@@ -1,7 +1,4 @@
-#include <cstdlib>
 #include <cstring>
-#include <iostream>
-#include <string>
 #include "calc-tiempo.hpp"
 
 int main (int argc, char *argv[]) {
