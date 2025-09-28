@@ -12,8 +12,8 @@ int main (int argc, char *argv[]) {
         break;
         case 4: {
             switch(*argv[2]) {
-                case '+': std::cout << ejecutarCalculo(argv[1], argv[3], SUMA) << "\n"; break;
-                case '-': std::cout << ejecutarCalculo(argv[1], argv[3], RESTA) << "\n"; break;
+                case '+': std::cout << ejecutarCalculo(argv[1], argv[3], SUMA) << '\n'; break;
+                case '-': std::cout << ejecutarCalculo(argv[1], argv[3], RESTA) << '\n'; break;
                 default: std::cout << ERROR_ARGUMENTOS_INVALIDOS; exit(EXIT_FAILURE); break;
             }
             break;

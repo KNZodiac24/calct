@@ -26,8 +26,7 @@ enum Operaciones {
 };
 
 inline void imprimirMensajeAyuda(){
-    std::cout << "-------------------- CALCULADORA DE TIEMPO --------------------\n"
-              << "---------------------------------------------------------------\n\n"
+    std::cout << "-------------------- CALCULADORA DE TIEMPO --------------------\n---------------------------------------------------------------\n\n"
               << "Se deben ingresar los tiempos con el siguiente formato: hh:mm:ss\nEl nivel de detalle máximo aceptado es en horas, y el mínimo en segundos. \n---------------------------------------------------------------\n"
               << "Ejemplos de formato (formato -> equivalencia en lenguaje natural):\n10:31:27 -> 10 horas, 31 minutos y 27 segundos\n01:03:07 -> 1 hora, 3 minutos y 7 segundos\n2:1:0 -> 2 horas, 1 minuto y 0 segundos\n10:3 -> 10 minutos y 3 segundos\n5:07 -> 5 minutos y 7 segundos\n34 -> 34 segundos\n03 -> 3 segundos\n9 -> 9 segundos\n\n"
               << "Ejemplos de uso:\nSuma de tiempos:\n\t23:19 + 56 -> 24:15\n\t1:3:4 + 2:34:1 -> 3:37:5\nResta de tiempos:\n\t4:56:12 - 1:23:09 -> 3:33:3\n\t57:29 - 19:51 -> 37:38";
@@ -111,7 +110,7 @@ inline std::vector<int> findLocation(std::string sample, char findIt)
  */
 inline std::expected<int*, std::string> separarValoresTiempo(std::string tiempo){
     
-    if(!tiempo.contains(":")) return new int[3]{ 0, 0, std::stoi(tiempo) };
+    if(!tiempo.contains(':')) return new int[3]{ 0, 0, std::stoi(tiempo) };
 
     std::string horasStr {};
     std::string minsStr {};
