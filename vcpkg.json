@@ -1,0 +1,9 @@
+{
+    "name": "calct",
+    "version": "1.0.0",
+    "description": "Calculadora de tiempo",
+    "license": "MIT",
+    "dependencies": [
+        "ctre"
+    ]
+}
