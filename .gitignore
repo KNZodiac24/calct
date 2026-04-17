@@ -22,9 +22,6 @@ vcpkg/
 *.dylib
 
 .vscode/
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
 
 .idea/
 cmake-build-*/
