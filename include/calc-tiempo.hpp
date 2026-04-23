@@ -1,6 +1,7 @@
 #ifndef CALC_TIEMPO_HPP
 #define CALC_TIEMPO_HPP
 
+#include <array>
 #include <iostream>
 #include <cmath>
 #include <vector>
@@ -14,10 +15,10 @@
 #define HORAS_A_MINS  60
 #define MINS_A_SEGS   60 
 
-#define ERROR_FORMATO "El formato ingresado en uno o ambos tiempos no es válido:\n\t-> Ejecutar con -h para ver el formato correcto y ejemplos de uso\n"
-#define ERROR_RANGO_VALORES "Uno o varios de los valores ingresados están fuera del rango válido de tiempo:\n\t-> Minutos y segundos deben ser menor o igual a 59\n"
-#define ERROR_ARGUMENTOS_INVALIDOS "Uno o varios de los argumentos ingresados no son válidos:\n\t-> Ejecutar con -h para ver el formato correcto y ejemplos de uso\n"
-#define ERROR_RESTA_INVALIDA "La operación ingresada no es válida:\n\t-> El primer tiempo ingresado debe ser mayor o igual al segundo.\n"
+#define ERROR_FORMATO "El formato ingresado en uno o ambos tiempos no es válido:\n    -> Ejecutar con -h para ver el formato correcto y ejemplos de uso\n"
+#define ERROR_RANGO_VALORES "Uno o varios de los valores ingresados están fuera del rango válido de tiempo:\n    -> Minutos y segundos deben ser menor o igual a 59\n"
+#define ERROR_ARGUMENTOS_INVALIDOS "Uno o varios de los argumentos ingresados no son válidos:\n    -> Ejecutar con -h para ver el formato correcto y ejemplos de uso\n"
+#define ERROR_RESTA_INVALIDA "La operación ingresada no es válida:\n    -> El primer tiempo ingresado debe ser mayor o igual al segundo.\n"
 
 enum Operaciones {
     SUMA,
@@ -102,14 +103,14 @@ inline std::vector<int> findLocation(std::string sample, char findIt)
  * 
  * @param tiempo: el tiempo del cual se obtienen las horas, minutos y segundos.
  * 
- * @return std::expected que es un puntero a un arreglo de 3 enteros que
- *         contiene los valores separados de horas, minutos y segundos. En caso de
- *         que los valores de minutos o segundos sean mayores a 59, se retorna un 
- *         std::unexpected indicando que dichos valores tienen esa restricción.
+ * @return std::expected que es un arreglo de 3 enteros que contiene los valores 
+ *         separados de horas, minutos y segundos. En caso de que los valores 
+ *         de minutos o segundos sean mayores a 59, se retorna un std::unexpected 
+ *         indicando que dichos valores tienen esa restricción.
  */
-inline std::expected<int*, std::string> separarValoresTiempo(std::string tiempo){
+inline std::expected<std::array<int, 3>, std::string> separarValoresTiempo(std::string tiempo){
     
-    if(!tiempo.contains(':')) return new int[3]{ 0, 0, std::stoi(tiempo) };
+    if(!tiempo.contains(':')) return std::array<int,3>{ 0, 0, std::stoi(tiempo) };
 
     std::string horasStr {};
     std::string minsStr {};
@@ -118,16 +119,18 @@ inline std::expected<int*, std::string> separarValoresTiempo(std::string tiempo)
     std::vector<int> separador { findLocation(tiempo, ':') };
 
     switch(separador.size()){
-        case 1: { horasStr = "0";
-                  minsStr = tiempo.substr(0, separador.at(0));
-                  segsStr = tiempo.substr(separador.at(0)+1, tiempo.length()-1); 
-                }
-                break;
-        case 2: { horasStr = tiempo.substr(0, separador.at(0));
-                  minsStr = tiempo.substr(separador.at(0)+1, separador.at(1));
-                  segsStr = tiempo.substr(separador.at(1)+1, tiempo.length()-1);
-                }    
-                break;
+        case 1: {
+            horasStr = "0";
+            minsStr = tiempo.substr(0, separador.at(0));
+            segsStr = tiempo.substr(separador.at(0)+1, tiempo.length()-1); 
+        }
+        break;
+        case 2: {
+            horasStr = tiempo.substr(0, separador.at(0));
+            minsStr = tiempo.substr(separador.at(0)+1, separador.at(1));
+            segsStr = tiempo.substr(separador.at(1)+1, tiempo.length()-1);
+        }    
+        break;
     }
 
     int horas { std::stoi(horasStr) };
@@ -136,19 +139,19 @@ inline std::expected<int*, std::string> separarValoresTiempo(std::string tiempo)
 
     if(mins > 59 || segs > 59) return std::unexpected(ERROR_RANGO_VALORES);
 
-    return new int[3]{ horas, mins, segs };
+    return std::array<int, 3>{ horas, mins, segs };
 }
 
 /**
  * @brief A partir de los valores de horas, minutos y segundos, se calcula 
  *        el tiempo total equivalente en segundos.
  * 
- * @param tiempo: puntero al arreglo de 3 enteros que contiene
+ * @param tiempo: el arreglo de 3 enteros que contiene
  *                las horas, minutos y segundos.
  * 
  * @return El valor equivalente en segundos del tiempo total ingresado.
  */
-inline int transformarTiempoASegundos(int* tiempo){
+inline int transformarTiempoASegundos(std::array<int,3> tiempo){
     return tiempo[0]*HORAS_EN_SEGS + tiempo[1]*MINS_EN_SEGS + tiempo[2];
 }
 
