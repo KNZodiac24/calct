@@ -1,4 +1,4 @@
-<h1 style="text-align: center;">calct</h1>
+<div align="center"><h1>calct</h1></div>
 
 Calculadora para operar valores de tiempo (hh:mm:ss) rápida y directamente en consola.
 
@@ -52,11 +52,11 @@ Descargar el ejecutable desde las [releases](https://github.com/KNZodiac24/calct
 - CMake
 - [Ninja](https://ninja-build.org/)
 - Compilador de C++
-    > [!NOTE]
-    > El compilador que se utiliza por defecto al ejecutar el build es `g++`. Para el caso de Windows, se puede utilizar el ejecutable de `g++` que viene incluido en la suite de herramientas y paquetes `MinGW-W64-builds` de [Mingw-w64](https://www.mingw-w64.org/downloads/).
+> [!NOTE] 
+> El compilador que se utiliza por defecto al ejecutar el build es `g++`. Para el caso de Windows, se puede utilizar el ejecutable de `g++` que viene incluido en la suite de herramientas y paquetes `MinGW-W64-builds` de [Mingw-w64](https://www.mingw-w64.org/downloads/).
 - Make
-    > [!NOTE]
-    > Para Windows se puede utilizar el ejecutable `mingw32-make` que también viene incluido en la suite de herramientas de Mingw-w64.
+> [!NOTE] 
+> Para Windows se puede utilizar el ejecutable `mingw32-make` que también viene incluido en la suite de herramientas de Mingw-w64.
 - Vcpkg [instalado y configurado](https://learn.microsoft.com/vcpkg/get_started/get-started) (seguir las instrucciones solo hasta el primer literal del paso 2); con la variable de entorno `VCPKG_ROOT` definida.
 
 ### Proceso 
@@ -67,12 +67,12 @@ Descargar el ejecutable desde las [releases](https://github.com/KNZodiac24/calct
         make setup
         ```
     - Windows:
-        > [!IMPORTANT]
-        > Para Windows se debe ejecutar añadiendo un argumento:
+> [!IMPORTANT] 
+> Para Windows se debe ejecutar añadiendo un argumento:
         ```
         mingw32-make setup WIN_ARGS="-DCMAKE_CXX_COMPILER=g++ -DVCPKG_TARGET_TRIPLET=x64-mingw-static -DVCPKG_HOST_TRIPLET=x64-mingw-static"
         ```
-        > De esta forma se asegura que el proyecto en Windows sea independiente de MSVC y Visual Studio; sin el argumento adicional, se tendría que trabajar obligatoriamente con dichas herramientas.
+> De esta forma se asegura que el proyecto en Windows sea independiente de MSVC y Visual Studio; sin el argumento adicional, se tendría que trabajar obligatoriamente con dichas herramientas.
 
     Con esto ya se puede realizar el desarrollo.
 
