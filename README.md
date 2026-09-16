@@ -69,12 +69,13 @@ Descargar el ejecutable desde las [releases](https://github.com/KNZodiac24/calct
     - Windows:
 > [!IMPORTANT] 
 > Para Windows se debe ejecutar añadiendo un argumento:
+
         ```
         mingw32-make setup WIN_ARGS="-DCMAKE_CXX_COMPILER=g++ -DVCPKG_TARGET_TRIPLET=x64-mingw-static -DVCPKG_HOST_TRIPLET=x64-mingw-static"
         ```
 > De esta forma se asegura que el proyecto en Windows sea independiente de MSVC y Visual Studio; sin el argumento adicional, se tendría que trabajar obligatoriamente con dichas herramientas.
 
-    Con esto ya se puede realizar el desarrollo.
+Con esto ya se puede realizar el desarrollo.
 
 2. Para compilar el proyecto se ejecuta en la carpeta raíz:
     - Linux:
