@@ -28,7 +28,7 @@ cmake-build-*/
 
 *~
 *.swp
-.DS_Store (si alguien usa macOS)
+.DS_Store
 
 *.log
 core

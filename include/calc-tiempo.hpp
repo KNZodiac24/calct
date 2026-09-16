@@ -93,7 +93,7 @@ inline std::vector<int> findLocation(std::string sample, char findIt)
     std::vector<int> characterLocations {};
     for(size_t i = 0; i < sample.size(); ++i)
         if(sample[i] == findIt)
-            characterLocations.push_back(i);
+            characterLocations.emplace_back(i);
 
     return characterLocations;
 }
