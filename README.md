@@ -73,7 +73,7 @@ Descargar el ejecutable desde las [releases](https://github.com/KNZodiac24/calct
 mingw32-make setup WIN_ARGS="-DCMAKE_CXX_COMPILER=g++ -DVCPKG_TARGET_TRIPLET=x64-mingw-static -DVCPKG_HOST_TRIPLET=x64-mingw-static"
 ```
 > [!IMPORTANT]
-> De esta forma se asegura que el proyecto en Windows sea independiente de MSVC y Visual Studio; sin el argumento adicional, se tendría que trabajar obligatoriamente con dichas herramientas.
+> De esta forma se asegura que el proyecto en Windows sea independiente de MSVC y Visual Studio; sin el argumento adicional, se tendría que trabajar obligatoriamente con dichas herramientas debido a que son las opciones predeterminadas de vcpkg en Windows.
 
 Con esto ya se puede realizar el desarrollo.
 
