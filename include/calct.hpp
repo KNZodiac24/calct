@@ -1,5 +1,5 @@
-#ifndef CALC_TIEMPO_HPP
-#define CALC_TIEMPO_HPP
+#ifndef CALCT_HPP
+#define CALCT_HPP
 
 #include <array>
 #include <iostream>
@@ -20,7 +20,7 @@
 #define ERROR_ARGUMENTOS_INVALIDOS "Uno o varios de los argumentos ingresados no son válidos:\n    -> Ejecutar con -h para ver el formato correcto y ejemplos de uso\n"
 #define ERROR_RESTA_INVALIDA "La operación ingresada no es válida:\n    -> El primer tiempo ingresado debe ser mayor o igual al segundo.\n"
 
-enum Operaciones {
+enum class Operaciones {
     SUMA,
     RESTA
 };
@@ -41,59 +41,60 @@ inline void imprimirMensajeAyuda(){
  *         cuando se cumple el formato. Caso contrario devuelve
  *         un std::unexpected indicando que el formato no se cumple.
  */
-inline std::expected<bool, std::string> validarFormato(std::string tiempo){
-    if(tiempo.empty()) return std::unexpected(ERROR_FORMATO);
+constexpr inline bool validarFormato(const std::string& tiempo){
+    if(tiempo.empty()) return false;
 
     short longitudString {static_cast<short>(tiempo.length())};
 
     if(longitudString >= 1 && longitudString <= 2 ){
-        auto matcher {ctre::match<"^[0-9]{1,2}$">};
+        constexpr auto matcher {ctre::match<"^[0-9]{1,2}$">};
         if(matcher(tiempo)) return true;
         
-        return std::unexpected(ERROR_FORMATO);
+        return false;
     } 
     
     if(longitudString >= 3 && longitudString <= 4 ){
-        auto matcher {ctre::match<"^[0-9]{1,2}:[0-9]{1}|[0-9]{1}:[0-9]{1,2}$">};
+        constexpr auto matcher {ctre::match<"^[0-9]{1,2}:[0-9]{1}|[0-9]{1}:[0-9]{1,2}$">};
         if(matcher(tiempo)) return true;
 
-        return std::unexpected(ERROR_FORMATO);
+        return false;
     }
 
     if(longitudString == 5 ){
-        auto matcherMinYSeg {ctre::match<"^[0-9]{1,2}:[0-9]{1,2}$">};
+        constexpr auto matcherMinYSeg {ctre::match<"^[0-9]{1,2}:[0-9]{1,2}$">};
         if(matcherMinYSeg(tiempo)) return true;
 
-        auto matcherHorMinYseg {ctre::match<"^[0-9]{1}:[0-9]{1}:[0-9]{1}$">};
+        constexpr auto matcherHorMinYseg {ctre::match<"^[0-9]{1}:[0-9]{1}:[0-9]{1}$">};
         if(matcherHorMinYseg(tiempo)) return true;
 
-        return std::unexpected(ERROR_FORMATO);
+        return false;
     }
 
     if(longitudString >= 6 && longitudString <= 8 ){
-        auto matcher {ctre::match<"^[0-9]{1,2}:[0-9]{1,2}:[0-9]{2}|[0-9]{1,2}:[0-9]{2}:[0-9]{1,2}|[0-9]{2}:[0-9]{1,2}:[0-9]{1,2}|[0-9]{4}:[0-9]{1}:[0-9]{1}|[0-9]{3}:[0-9]{1,2}:[0-9]{1,2}$">};
+        constexpr auto matcher {ctre::match<"^[0-9]{1,2}:[0-9]{1,2}:[0-9]{2}|[0-9]{1,2}:[0-9]{2}:[0-9]{1,2}|[0-9]{2}:[0-9]{1,2}:[0-9]{1,2}|[0-9]{4}:[0-9]{1}:[0-9]{1}|[0-9]{3}:[0-9]{1,2}:[0-9]{1,2}$">};
         if(matcher(tiempo)) return true;
 
-        return std::unexpected(ERROR_FORMATO);
+        return false;
     }
 
     if(longitudString > 8 ){
-        auto matcher {ctre::match<"^[0-9]{3}:[0-9]{2}:[0-9]{2}|[0-9]{4,}:[0-9]{1,2}:[0-9]{1,2}$">};
+        constexpr auto matcher {ctre::match<"^[0-9]{3}:[0-9]{2}:[0-9]{2}|[0-9]{4,}:[0-9]{1,2}:[0-9]{1,2}$">};
         if(matcher(tiempo)) return true;
 
-        return std::unexpected(ERROR_FORMATO);
+        return false;
     }
 
-    return std::unexpected(ERROR_FORMATO);
+    return false;
 }
 
 // De: https://stackoverflow.com/questions/7726762/finding-all-occurrences-of-a-character-in-a-string
-inline std::vector<int> findLocation(std::string sample, char findIt)
+inline std::vector<int> findLocation(const std::string& sample, char findIt)
 {
     std::vector<int> characterLocations {};
-    for(size_t i = 0; i < sample.size(); ++i)
-        if(sample[i] == findIt)
-            characterLocations.emplace_back(i);
+
+    for(size_t i { 0 }; i < sample.size(); ++i){
+        if(sample[i] == findIt) characterLocations.emplace_back(i);
+    }
 
     return characterLocations;
 }
@@ -108,7 +109,7 @@ inline std::vector<int> findLocation(std::string sample, char findIt)
  *         de minutos o segundos sean mayores a 59, se retorna un std::unexpected 
  *         indicando que dichos valores tienen esa restricción.
  */
-inline std::expected<std::array<int, 3>, std::string> separarValoresTiempo(std::string tiempo){
+inline std::expected<std::array<int, 3>, std::string> separarValoresTiempo(const std::string& tiempo){
     
     if(!tiempo.contains(':')) return std::array<int,3>{ 0, 0, std::stoi(tiempo) };
 
@@ -151,7 +152,7 @@ inline std::expected<std::array<int, 3>, std::string> separarValoresTiempo(std::
  * 
  * @return El valor equivalente en segundos del tiempo total ingresado.
  */
-inline int transformarTiempoASegundos(std::array<int,3> tiempo){
+inline int transformarTiempoASegundos(const std::array<int,3>& tiempo){
     return tiempo[0]*HORAS_EN_SEGS + tiempo[1]*MINS_EN_SEGS + tiempo[2];
 }
 
@@ -168,8 +169,8 @@ inline int transformarTiempoASegundos(std::array<int,3> tiempo){
 inline int realizarOperacion(int t1, int t2, Operaciones op){
     int resultado {};
     switch (op) {
-        case SUMA: resultado = t1 + t2; break;
-        case RESTA: {
+        case Operaciones::SUMA: resultado = t1 + t2; break;
+        case Operaciones::RESTA: {
             if(t1 >= t2){ resultado = t1 - t2; break; }
             std::cout << ERROR_RESTA_INVALIDA; exit(EXIT_FAILURE);
         }break;
@@ -185,7 +186,7 @@ inline int realizarOperacion(int t1, int t2, Operaciones op){
  * @return Cadena de texto del tiempo en formato hh:mm:ss.
  */
 inline std::string convertirResultadoATiempo(int resultadoEnSegs){
-    double resultadoAConvertir { double(resultadoEnSegs) };
+    double resultadoAConvertir { static_cast<double>(resultadoEnSegs) };
 
     double horaDecimal { resultadoAConvertir*SEGS_A_HORAS };
     double parteEnteraHora {};
@@ -206,9 +207,9 @@ inline std::string convertirResultadoATiempo(int resultadoEnSegs){
 
     if(hora == 0 && mins == 0) return std::to_string(segs);
 
-    if(hora == 0) return std::string(std::to_string(mins)+':'+std::to_string(segs));
+    if(hora == 0) return std::string{std::to_string(mins)+':'+std::to_string(segs)};
     
-    return std::string(std::to_string(hora)+':'+std::to_string(mins)+':'+std::to_string(segs));
+    return std::string{std::to_string(hora)+':'+std::to_string(mins)+':'+std::to_string(segs)};
 }
 
 /**
@@ -222,12 +223,11 @@ inline std::string convertirResultadoATiempo(int resultadoEnSegs){
  * @return El resultado de la operación realizada entre los dos tiempos como cadena de texto
  *         siguiendo el formato establecido.
  */
-inline std::string ejecutarCalculo(std::string t1, std::string t2, Operaciones op){
-    auto validacionFormatoT1 { validarFormato(t1) };
-    auto validacionFormatoT2 { validarFormato(t2) };
+inline std::string ejecutarCalculo(const std::string& t1, const std::string& t2, Operaciones op){
     
-    if(!validacionFormatoT1){ std::cout << validacionFormatoT1.error(); exit(EXIT_FAILURE); }
-    if(!validacionFormatoT2){ std::cout << validacionFormatoT2.error(); exit(EXIT_FAILURE); }
+    if(!validarFormato(t1)){ std::cout << ERROR_FORMATO; exit(EXIT_FAILURE); }
+
+    if(!validarFormato(t2)){ std::cout << ERROR_FORMATO; exit(EXIT_FAILURE); }
 
     auto valoresT1 { separarValoresTiempo(t1) };
     auto valoresT2 { separarValoresTiempo(t2) };
